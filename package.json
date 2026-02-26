@@ -1,0 +1,33 @@
+{
+  "name": "html2img",
+  "version": "1.0.0",
+  "description": "HTML to Image conversion tool with Web UI, API, and CLI",
+  "main": "server/index.js",
+  "bin": {
+    "html2img": "cli/index.js"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "nodemon server/index.js",
+    "cli": "node cli/index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "archiver": "^6.0.2",
+    "chalk": "^4.1.2",
+    "commander": "^11.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1",
+    "ora": "^5.4.1",
+    "puppeteer": "^22.12.1",
+    "sharp": "^0.33.5",
+    "chokidar": "^3.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

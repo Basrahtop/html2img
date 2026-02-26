@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTML2IMG</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <div>
+          <h1>HTML2IMG</h1>
+          <p>Convert HTML into PNG, JPEG, or WebP images.</p>
+        </div>
+        <div class="theme-toggle">
+          <label class="switch">
+            <input type="checkbox" id="themeToggle" />
+            <span class="slider"></span>
+          </label>
+          <span>Dark mode</span>
+        </div>
+      </header>
+
+      <main class="grid">
+        <section class="panel">
+          <div class="section">
+            <h2>HTML Input</h2>
+            <textarea id="htmlInput" spellcheck="false"><div style="font-family: Arial; padding: 40px; background: #0f172a; color: white; border-radius: 16px; width: 600px;">
+  <h1 style="margin: 0 0 12px;">Hello HTML2IMG</h1>
+  <p style="margin: 0;">Paste HTML or drop a file to begin.</p>
+</div></textarea>
+            <div class="upload" id="dropZone">
+              <input type="file" id="fileInput" accept=".html,.htm" multiple />
+              <p>Drag & drop HTML files here or click to browse</p>
+              <div class="file-list" id="fileList"></div>
+            </div>
+          </div>
+
+          <div class="section">
+            <h2>Controls</h2>
+            <div class="controls">
+              <label>Width <input type="number" id="width" value="1920" /></label>
+              <label>Height <input type="number" id="height" value="1080" /></label>
+              <label class="inline"><input type="checkbox" id="lockRatio" /> Lock aspect ratio</label>
+              <label>Preset
+                <select id="presetSelect">
+                  <option value="">Custom</option>
+                </select>
+              </label>
+              <label>Format
+                <select id="format">
+                  <option value="png">PNG</option>
+                  <option value="jpeg">JPEG</option>
+                  <option value="webp">WebP</option>
+                </select>
+              </label>
+              <label>Quality <input type="range" id="quality" min="1" max="100" value="90" /> <span id="qualityValue">90</span></label>
+              <label class="inline"><input type="checkbox" id="transparent" /> Transparent background</label>
+              <label class="inline"><input type="checkbox" id="fullPage" /> Full page screenshot</label>
+            </div>
+          </div>
+
+          <div class="section">
+            <button class="collapse" id="advancedToggle">Advanced Options</button>
+            <div class="advanced" id="advancedPanel">
+              <label>Device scale factor
+                <select id="scale">
+                  <option value="1">1x</option>
+                  <option value="2">2x</option>
+                  <option value="3">3x</option>
+                </select>
+              </label>
+              <label>Capture delay (ms) <input type="number" id="delay" value="0" /></label>
+              <label>CSS selector <input type="text" id="selector" placeholder="#app .card" /></label>
+              <label>Inject CSS <textarea id="injectCSS" placeholder=".card { box-shadow: 0 0 10px #000; }"></textarea></label>
+              <label>Inject JS <textarea id="injectJS" placeholder="document.body.style.background = 'white';"></textarea></label>
+            </div>
+          </div>
+
+          <div class="section actions">
+            <button class="primary" id="generateBtn">Generate Image</button>
+            <button id="resetBtn">Reset</button>
+            <button id="downloadBtn" class="hidden">Download</button>
+            <button id="downloadZipBtn" class="hidden">Download ZIP</button>
+          </div>
+          <div class="status" id="status"></div>
+        </section>
+
+        <section class="preview">
+          <div class="preview-header">
+            <h2>Preview</h2>
+            <div class="zoom">
+              <button data-zoom="0.5">50%</button>
+              <button data-zoom="1">100%</button>
+              <label class="inline"><input type="checkbox" id="gridToggle" /> Grid</label>
+            </div>
+          </div>
+          <div class="preview-frame" id="previewFrame">
+            <div class="preview-wrapper" id="previewWrapper">
+              <iframe id="previewIframe" title="preview"></iframe>
+              <div class="grid-overlay" id="gridOverlay"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="/js/preview.js"></script>
+    <script src="/js/uploader.js"></script>
+    <script src="/js/app.js"></script>
+  </body>
+</html>

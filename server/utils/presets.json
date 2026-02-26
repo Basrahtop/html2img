@@ -1,0 +1,19 @@
+{
+  "desktop": [
+    { "name": "Full HD", "width": 1920, "height": 1080 },
+    { "name": "HD", "width": 1366, "height": 768 }
+  ],
+  "mobile": [
+    { "name": "iPhone", "width": 375, "height": 667 },
+    { "name": "Android", "width": 360, "height": 640 }
+  ],
+  "tablet": [
+    { "name": "iPad", "width": 768, "height": 1024 },
+    { "name": "Tablet", "width": 800, "height": 1280 }
+  ],
+  "social": [
+    { "name": "Facebook", "width": 1200, "height": 630 },
+    { "name": "Twitter", "width": 1200, "height": 675 },
+    { "name": "Instagram", "width": 1080, "height": 1080 }
+  ]
+}
