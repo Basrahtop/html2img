@@ -14,7 +14,14 @@ async function renderHtmlToImage(options) {
     fullPage,
     selector,
     injectCSS,
-    injectJS
+    injectJS,
+    pageFormat,
+    landscape,
+    printBackground,
+    marginTop,
+    marginRight,
+    marginBottom,
+    marginLeft
   } = options;
 
   const browser = await puppeteer.launch({
@@ -23,7 +30,12 @@ async function renderHtmlToImage(options) {
 
   try {
     const page = await browser.newPage();
-    await page.setViewport({ width, height, deviceScaleFactor });
+    
+    // For PDF, we don't set viewport (uses page format instead)
+    if (format !== "pdf") {
+      await page.setViewport({ width, height, deviceScaleFactor });
+    }
+    
     await page.setContent(ensureHtmlDocument(html), { waitUntil: "networkidle0" });
 
     if (injectCSS) {
@@ -37,28 +49,46 @@ async function renderHtmlToImage(options) {
       await page.waitForTimeout(delay);
     }
 
-    const screenshotOptions = {
-      type: format,
-      fullPage: Boolean(fullPage)
-    };
-
-    if (format !== "png") {
-      screenshotOptions.quality = quality;
-    }
-
-    if (transparent && format !== "jpeg") {
-      screenshotOptions.omitBackground = true;
-    }
-
     let buffer;
-    if (selector) {
-      const element = await page.$(selector);
-      if (!element) {
-        throw new Error(`Selector not found: ${selector}`);
-      }
-      buffer = await element.screenshot(screenshotOptions);
+
+    // Handle PDF generation
+    if (format === "pdf") {
+      const pdfOptions = {
+        format: pageFormat || "A4",
+        landscape: Boolean(landscape),
+        printBackground: Boolean(printBackground),
+        margin: {
+          top: marginTop || "0",
+          right: marginRight || "0",
+          bottom: marginBottom || "0",
+          left: marginLeft || "0"
+        }
+      };
+      buffer = await page.pdf(pdfOptions);
     } else {
-      buffer = await page.screenshot(screenshotOptions);
+      // Handle image generation (existing logic)
+      const screenshotOptions = {
+        type: format,
+        fullPage: Boolean(fullPage)
+      };
+
+      if (format !== "png") {
+        screenshotOptions.quality = quality;
+      }
+
+      if (transparent && format !== "jpeg") {
+        screenshotOptions.omitBackground = true;
+      }
+
+      if (selector) {
+        const element = await page.$(selector);
+        if (!element) {
+          throw new Error(`Selector not found: ${selector}`);
+        }
+        buffer = await element.screenshot(screenshotOptions);
+      } else {
+        buffer = await page.screenshot(screenshotOptions);
+      }
     }
 
     return buffer;

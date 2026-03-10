@@ -53,11 +53,26 @@
                   <option value="png">PNG</option>
                   <option value="jpeg">JPEG</option>
                   <option value="webp">WebP</option>
+                  <option value="pdf">PDF</option>
                 </select>
               </label>
-              <label>Quality <input type="range" id="quality" min="1" max="100" value="90" /> <span id="qualityValue">90</span></label>
-              <label class="inline"><input type="checkbox" id="transparent" /> Transparent background</label>
-              <label class="inline"><input type="checkbox" id="fullPage" /> Full page screenshot</label>
+              <label id="qualityControl">Quality <input type="range" id="quality" min="1" max="100" value="90" /> <span id="qualityValue">90</span></label>
+              <label class="inline" id="transparentControl"><input type="checkbox" id="transparent" /> Transparent background</label>
+              <label class="inline" id="fullPageControl"><input type="checkbox" id="fullPage" /> Full page screenshot</label>
+              <div id="pdfControls" style="display: none; grid-column: 1 / -1;">
+                <label>Page Format
+                  <select id="pageFormat">
+                    <option value="Letter">Letter</option>
+                    <option value="Legal">Legal</option>
+                    <option value="Tabloid">Tabloid</option>
+                    <option value="A4" selected>A4</option>
+                    <option value="A3">A3</option>
+                    <option value="A5">A5</option>
+                  </select>
+                </label>
+                <label class="inline"><input type="checkbox" id="landscape" /> Landscape</label>
+                <label class="inline"><input type="checkbox" id="printBackground" checked /> Print backgrounds</label>
+              </div>
             </div>
           </div>
 

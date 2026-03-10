@@ -5,8 +5,15 @@ const lockRatioInput = document.getElementById("lockRatio");
 const formatInput = document.getElementById("format");
 const qualityInput = document.getElementById("quality");
 const qualityValue = document.getElementById("qualityValue");
+const qualityControl = document.getElementById("qualityControl");
 const transparentInput = document.getElementById("transparent");
+const transparentControl = document.getElementById("transparentControl");
 const fullPageInput = document.getElementById("fullPage");
+const fullPageControl = document.getElementById("fullPageControl");
+const pdfControls = document.getElementById("pdfControls");
+const pageFormatInput = document.getElementById("pageFormat");
+const landscapeInput = document.getElementById("landscape");
+const printBackgroundInput = document.getElementById("printBackground");
 const scaleInput = document.getElementById("scale");
 const delayInput = document.getElementById("delay");
 const selectorInput = document.getElementById("selector");
@@ -36,21 +43,51 @@ function setStatus(message, type = "") {
   status.className = `status ${type}`;
 }
 
+function updateFormatControls() {
+  const isPdf = formatInput.value === "pdf";
+  
+  // Hide image-only controls for PDF
+  qualityControl.style.display = isPdf ? "none" : "";
+  transparentControl.style.display = isPdf ? "none" : "";
+  fullPageControl.style.display = isPdf ? "none" : "";
+  selectorInput.closest("label").style.display = isPdf ? "none" : "";
+  scaleInput.closest("label").style.display = isPdf ? "none" : "";
+  
+  // Show PDF-only controls
+  pdfControls.style.display = isPdf ? "grid" : "none";
+  
+  // Update dimension labels
+  widthInput.closest("label").style.display = isPdf ? "none" : "";
+  heightInput.closest("label").style.display = isPdf ? "none" : "";
+  lockRatioInput.closest("label").style.display = isPdf ? "none" : "";
+}
+
 function getPayload() {
-  return {
+  const payload = {
     html: htmlInput.value,
-    width: Number(widthInput.value),
-    height: Number(heightInput.value),
     format: formatInput.value,
-    quality: Number(qualityInput.value),
-    transparent: transparentInput.checked,
-    deviceScaleFactor: Number(scaleInput.value),
     delay: Number(delayInput.value),
-    fullPage: fullPageInput.checked,
-    selector: selectorInput.value || null,
     injectCSS: injectCSSInput.value,
     injectJS: injectJSInput.value
   };
+  
+  // Add image-specific options
+  if (formatInput.value !== "pdf") {
+    payload.width = Number(widthInput.value);
+    payload.height = Number(heightInput.value);
+    payload.quality = Number(qualityInput.value);
+    payload.transparent = transparentInput.checked;
+    payload.deviceScaleFactor = Number(scaleInput.value);
+    payload.fullPage = fullPageInput.checked;
+    payload.selector = selectorInput.value || null;
+  } else {
+    // Add PDF-specific options
+    payload.pageFormat = pageFormatInput.value;
+    payload.landscape = landscapeInput.checked;
+    payload.printBackground = printBackgroundInput.checked;
+  }
+  
+  return payload;
 }
 
 async function loadPresets() {
@@ -103,11 +140,13 @@ async function generateImage() {
         const error = await response.json();
         throw new Error(error.details || "Conversion failed");
       }
-      const blob = await response.blob();
+      const arrayBuffer = await response.arrayBuffer();
+      const mimeType = formatInput.value === "pdf" ? "application/pdf" : `image/${formatInput.value}`;
+      const blob = new Blob([arrayBuffer], { type: mimeType });
       latestBlob = blob;
       latestFilename = `output.${formatInput.value}`;
       downloadBtn.classList.remove("hidden");
-      setStatus("Image ready.");
+      setStatus(formatInput.value === "pdf" ? "PDF ready." : "Image ready.");
       return;
     }
 
@@ -122,11 +161,13 @@ async function generateImage() {
       throw new Error(error.details || "Conversion failed");
     }
 
-    const blob = await response.blob();
+    const arrayBuffer = await response.arrayBuffer();
+    const mimeType = formatInput.value === "pdf" ? "application/pdf" : `image/${formatInput.value}`;
+    const blob = new Blob([arrayBuffer], { type: mimeType });
     latestBlob = blob;
     latestFilename = `output.${formatInput.value}`;
     downloadBtn.classList.remove("hidden");
-    setStatus("Image ready.");
+    setStatus(formatInput.value === "pdf" ? "PDF ready." : "Image ready.");
   } catch (error) {
     setStatus(error.message || "Something went wrong.", "error");
   } finally {
@@ -162,6 +203,7 @@ function downloadZip() {
 
 htmlInput.addEventListener("input", () => window.preview.updatePreview(htmlInput.value));
 qualityInput.addEventListener("input", updateQualityLabel);
+formatInput.addEventListener("change", updateFormatControls);
 
 function updatePreviewDimensions() {
   const w = Number(widthInput.value) || 1920;
@@ -250,6 +292,7 @@ downloadZipBtn.addEventListener("click", () => {
 generateBtn.addEventListener("click", generateImage);
 
 updateQualityLabel();
+updateFormatControls();
 window.preview.updatePreview(htmlInput.value);
 updatePreviewDimensions();
 loadPresets();

@@ -20,7 +20,15 @@ function normalizeOptions(input = {}) {
     selector: input.selector || null,
     injectCSS: input.injectCSS || "",
     injectJS: input.injectJS || "",
-    responseType: input.responseType || DEFAULTS.responseType
+    responseType: input.responseType || DEFAULTS.responseType,
+    // PDF-specific options
+    pageFormat: input.pageFormat || DEFAULTS.pageFormat,
+    landscape: Boolean(input.landscape),
+    printBackground: input.printBackground !== undefined ? Boolean(input.printBackground) : DEFAULTS.printBackground,
+    marginTop: input.marginTop || DEFAULTS.marginTop,
+    marginRight: input.marginRight || DEFAULTS.marginRight,
+    marginBottom: input.marginBottom || DEFAULTS.marginBottom,
+    marginLeft: input.marginLeft || DEFAULTS.marginLeft
   };
 
   if (normalized.quality < 1) normalized.quality = 1;

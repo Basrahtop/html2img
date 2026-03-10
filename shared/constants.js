@@ -10,12 +10,23 @@ const DEFAULTS = {
   selector: null,
   injectCSS: "",
   injectJS: "",
-  responseType: "binary"
+  responseType: "binary",
+  // PDF-specific
+  pageFormat: "A4",
+  landscape: false,
+  printBackground: true,
+  marginTop: "0",
+  marginRight: "0",
+  marginBottom: "0",
+  marginLeft: "0"
 };
 
-const ALLOWED_FORMATS = ["png", "jpeg", "webp"];
+const ALLOWED_FORMATS = ["png", "jpeg", "webp", "pdf"];
+
+const PDF_PAGE_FORMATS = ["Letter", "Legal", "Tabloid", "Ledger", "A0", "A1", "A2", "A3", "A4", "A5", "A6"];
 
 module.exports = {
   DEFAULTS,
-  ALLOWED_FORMATS
+  ALLOWED_FORMATS,
+  PDF_PAGE_FORMATS
 };
